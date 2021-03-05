@@ -76,5 +76,18 @@ public class KnightController : MonoBehaviour
             rb.simulated = false;
             return;
         }
+
+        if (collision.CompareTag("TextZone"))
+        {
+            collision.GetComponent<TextZoneBehaviour>().ShowText();
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("TextZone"))
+        {
+            collision.GetComponent<TextZoneBehaviour>().HideText();
+        }
     }
 }
