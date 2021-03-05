@@ -57,7 +57,7 @@ public class KnightController : MonoBehaviour
         }
         else
         {
-            rb.velocity = new Vector2(0f, 0f);
+            // rb.velocity = new Vector2(0f, 0f);
         }
     }
 
@@ -73,6 +73,7 @@ public class KnightController : MonoBehaviour
             isDead = true;
             anim.SetTrigger("die");
             gameOverScreen.SetActive(true);
+            rb.simulated = false;
             return;
         }
     }
