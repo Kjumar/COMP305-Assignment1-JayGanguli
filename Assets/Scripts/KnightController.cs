@@ -15,10 +15,13 @@ public class KnightController : MonoBehaviour
 
     [Header("Misc")]
     public GameObject gameOverScreen;
+    [SerializeField] private GameObject attackObject;
 
     private bool isDead = false;
     private Rigidbody2D rb;
     private Animator anim;
+    private bool isAttacking = false;
+    private float attackTimer = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -34,30 +37,51 @@ public class KnightController : MonoBehaviour
 
         if (!isDead)
         {
-            if (isGrounded)
+            if (!isAttacking)
             {
-                anim.SetBool("isJumping", false);
-
-                if (Input.GetAxis("Jump") > 0)
+                if (isGrounded)
                 {
-                    rb.velocity = new Vector2(rb.velocity.x, 0f);
-                    rb.AddForce(new Vector2(0f, jumpForce));
-                    isGrounded = false;
+                    anim.SetBool("isJumping", false);
 
+                    if (Input.GetAxis("Jump") > 0)
+                    {
+                        rb.velocity = new Vector2(rb.velocity.x, 0f);
+                        rb.AddForce(new Vector2(0f, jumpForce));
+                        isGrounded = false;
+
+                        anim.SetFloat("ySpeed", rb.velocity.y);
+                        anim.SetBool("isJumping", true);
+                    }
+                }
+                else
+                {
                     anim.SetFloat("ySpeed", rb.velocity.y);
                     anim.SetBool("isJumping", true);
+                }
+
+                if (Input.GetAxis("Fire1") > 0)
+                {
+                    anim.SetTrigger("attack");
+                    isAttacking = true;
+                    attackTimer = 0.2f; // this is just short of the amount of time the attack animation takes
+                    attackObject.SetActive(true);
+                }
+                else
+                {
+                    anim.ResetTrigger("attack");
+                    attackObject.SetActive(false);
                 }
             }
             else
             {
-                anim.SetFloat("ySpeed", rb.velocity.y);
+                attackTimer -= Time.deltaTime;
+                if (attackTimer <= 0f)
+                {
+                    isAttacking = false;
+                }
             }
 
             rb.velocity = new Vector2(speed, rb.velocity.y);
-        }
-        else
-        {
-            // rb.velocity = new Vector2(0f, 0f);
         }
     }
 
@@ -76,7 +100,7 @@ public class KnightController : MonoBehaviour
             rb.simulated = false;
             return;
         }
-
+        
         if (collision.CompareTag("TextZone"))
         {
             collision.GetComponent<TextZoneBehaviour>().ShowText();
