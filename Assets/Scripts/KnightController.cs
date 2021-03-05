@@ -114,4 +114,15 @@ public class KnightController : MonoBehaviour
             collision.GetComponent<TextZoneBehaviour>().HideText();
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            isDead = true;
+            anim.SetTrigger("die");
+            gameOverScreen.SetActive(true);
+            rb.simulated = false;
+        }
+    }
 }
