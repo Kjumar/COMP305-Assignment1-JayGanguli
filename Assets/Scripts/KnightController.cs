@@ -18,6 +18,13 @@ public class KnightController : MonoBehaviour
     public GameObject victoryText;
     [SerializeField] private GameObject attackObject;
 
+    [Header("Audio Clips")]
+    [SerializeField] private AudioSource bgm;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip winClip;
+    [SerializeField] private AudioClip loseClip;
+    [SerializeField] private AudioClip attackClip;
+
     private bool isDead = false;
     private Rigidbody2D rb;
     private Animator anim;
@@ -66,6 +73,8 @@ public class KnightController : MonoBehaviour
                     isAttacking = true;
                     attackTimer = 0.2f; // this is just short of the amount of time the attack animation takes
                     attackObject.SetActive(true);
+
+                    audioSource.PlayOneShot(attackClip);
                 }
                 else
                 {
@@ -99,6 +108,8 @@ public class KnightController : MonoBehaviour
             anim.SetTrigger("die");
             gameOverScreen.SetActive(true);
             rb.simulated = false;
+            bgm.Stop();
+            audioSource.PlayOneShot(loseClip);
             return;
         }
         
@@ -112,6 +123,9 @@ public class KnightController : MonoBehaviour
         {
             victoryText.SetActive(true);
             gameOverScreen.SetActive(true);
+            bgm.Stop();
+            audioSource.PlayOneShot(winClip);
+            isDead = true;
         }
     }
 
@@ -131,6 +145,8 @@ public class KnightController : MonoBehaviour
             anim.SetTrigger("die");
             gameOverScreen.SetActive(true);
             rb.simulated = false;
+            bgm.Stop();
+            audioSource.PlayOneShot(loseClip);
         }
     }
 }

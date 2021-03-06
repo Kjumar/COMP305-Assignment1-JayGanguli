@@ -5,6 +5,9 @@ using Cinemachine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hitClip;
+
     private Rigidbody2D rb;
     private Animator anim;
     private CinemachineImpulseSource impulse;
@@ -15,6 +18,8 @@ public class EnemyBehaviour : MonoBehaviour
         anim = GetComponent<Animator>();
         impulse = GetComponent<CinemachineImpulseSource>();
         impulse.enabled = false;
+
+        audioSource = GameObject.Find("EnemySFXSource").GetComponent<AudioSource>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -26,6 +31,8 @@ public class EnemyBehaviour : MonoBehaviour
 
             impulse.enabled = true;
             impulse.GenerateImpulse();
+
+            audioSource.PlayOneShot(hitClip);
 
             Destroy(gameObject, 0.5f);
         }
