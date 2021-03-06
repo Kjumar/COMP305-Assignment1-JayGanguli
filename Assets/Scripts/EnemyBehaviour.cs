@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Animator anim;
+    private CinemachineImpulseSource impulse;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        impulse = GetComponent<CinemachineImpulseSource>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -19,6 +22,7 @@ public class EnemyBehaviour : MonoBehaviour
         {
             anim.SetTrigger("hit");
             rb.simulated = false;
+            impulse.GenerateImpulse();
             Destroy(gameObject, 0.5f);
         }
     }
