@@ -14,6 +14,7 @@ public class EnemyBehaviour : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         impulse = GetComponent<CinemachineImpulseSource>();
+        impulse.enabled = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -22,7 +23,10 @@ public class EnemyBehaviour : MonoBehaviour
         {
             anim.SetTrigger("hit");
             rb.simulated = false;
+
+            impulse.enabled = true;
             impulse.GenerateImpulse();
+
             Destroy(gameObject, 0.5f);
         }
     }
