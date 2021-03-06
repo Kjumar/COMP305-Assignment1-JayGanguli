@@ -15,6 +15,7 @@ public class KnightController : MonoBehaviour
 
     [Header("Misc")]
     public GameObject gameOverScreen;
+    public GameObject victoryText;
     [SerializeField] private GameObject attackObject;
 
     private bool isDead = false;
@@ -104,6 +105,13 @@ public class KnightController : MonoBehaviour
         if (collision.CompareTag("TextZone"))
         {
             collision.GetComponent<TextZoneBehaviour>().ShowText();
+            return;
+        }
+
+        if (collision.CompareTag("Goal"))
+        {
+            victoryText.SetActive(true);
+            gameOverScreen.SetActive(true);
         }
     }
 
